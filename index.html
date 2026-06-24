@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>✦ GALAXY GUESS ✦ 電資一甲412043林元薇</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Starfield canvas -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Glitter overlay -->
+  <div id="glitter-layer"></div>
+
+  <!-- Nebula rings -->
+  <div class="nebula-ring ring1"></div>
+  <div class="nebula-ring ring2"></div>
+  <div class="nebula-ring ring3"></div>
+
+  <!-- Author badge (always visible) -->
+  <div class="author-badge">
+    <span class="badge-star">✦</span>
+    <span class="badge-text">電資一甲 &nbsp;412043 &nbsp;林元薇</span>
+    <span class="badge-star">✦</span>
+  </div>
+
+  <div class="universe-container">
+
+    <!-- Header -->
+    <header class="game-header">
+      <div class="title-glow-wrap">
+        <h1 class="game-title">
+          <span class="title-icon">🌌</span>
+          <span class="title-word">GALAXY</span>
+          <span class="title-word accent">GUESS</span>
+          <span class="title-icon">🚀</span>
+        </h1>
+        <p class="game-subtitle">銀河系猜數字 · 電資一甲412043</p>
+      </div>
+    </header>
+
+    <!-- Difficulty selector -->
+    <section class="difficulty-panel" id="difficulty-panel">
+      <h2 class="section-title">⚡ 選擇難度 · SELECT MISSION</h2>
+      <div class="diff-grid">
+        <button class="diff-btn" data-min="1" data-max="10" data-tries="5">
+          <span class="diff-icon">🌙</span>
+          <span class="diff-name">LUNAR</span>
+          <span class="diff-range">1 – 10</span>
+          <span class="diff-tries">5 次機會</span>
+        </button>
+        <button class="diff-btn active" data-min="1" data-max="100" data-tries="10">
+          <span class="diff-icon">🪐</span>
+          <span class="diff-name">SATURN</span>
+          <span class="diff-range">1 – 100</span>
+          <span class="diff-tries">10 次機會</span>
+        </button>
+        <button class="diff-btn" data-min="1" data-max="500" data-tries="12">
+          <span class="diff-icon">⭐</span>
+          <span class="diff-name">STELLAR</span>
+          <span class="diff-range">1 – 500</span>
+          <span class="diff-tries">12 次機會</span>
+        </button>
+        <button class="diff-btn" data-min="1" data-max="1000" data-tries="10">
+          <span class="diff-icon">🌠</span>
+          <span class="diff-name">COSMIC</span>
+          <span class="diff-range">1 – 1000</span>
+          <span class="diff-tries">10 次機會</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat-chip">🏆 <span id="wins-count">0</span> 勝</div>
+      <div class="stat-chip">💀 <span id="loss-count">0</span> 敗</div>
+      <div class="stat-chip">🔥 連勝 <span id="streak-count">0</span></div>
+      <div class="stat-chip">⚡ 最佳 <span id="best-score">—</span></div>
+    </div>
+
+    <!-- Game panel -->
+    <main class="game-panel" id="game-panel">
+
+      <!-- HUD -->
+      <div class="hud">
+        <div class="hud-item">
+          <span class="hud-label">範圍</span>
+          <span class="hud-value" id="range-display">1 – 100</span>
+        </div>
+        <div class="hud-item tries-hud">
+          <span class="hud-label">剩餘嘗試</span>
+          <div class="tries-dots" id="tries-dots"></div>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">猜測次數</span>
+          <span class="hud-value" id="guess-count">0</span>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+        <div class="progress-ship" id="progress-ship">🚀</div>
+      </div>
+
+      <!-- Hint compass -->
+      <div class="compass-wrap">
+        <div class="compass" id="compass">
+          <div class="compass-inner">
+            <span class="compass-label" id="compass-label">🛸 探測訊號等待中…</span>
+          </div>
+          <div class="compass-ring"></div>
+          <div class="compass-ring r2"></div>
+        </div>
+      </div>
+
+      <!-- Input zone -->
+      <div class="input-zone">
+        <div class="input-wrap">
+          <input
+            type="number"
+            id="guess-input"
+            class="guess-input"
+            placeholder="輸入星際座標…"
+            autocomplete="off"
+          />
+          <button class="launch-btn" id="launch-btn">
+            <span class="btn-text">發射 LAUNCH</span>
+            <span class="btn-icon">🚀</span>
+          </button>
+        </div>
+
+        <!-- Hint slider (binary search assist) -->
+        <div class="slider-zone">
+          <label class="slider-label">🎯 滑動瞄準</label>
+          <input type="range" id="aim-slider" class="aim-slider" min="1" max="100" value="50" />
+          <span class="slider-val" id="slider-val">50</span>
+        </div>
+      </div>
+
+      <!-- History log -->
+      <div class="history-panel">
+        <h3 class="history-title">📡 飛行日誌 · MISSION LOG</h3>
+        <div class="history-list" id="history-list">
+          <p class="history-empty">還沒有紀錄。開始你的星際任務！</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Control buttons -->
+    <div class="controls">
+      <button class="ctrl-btn" id="new-game-btn">🌌 新遊戲 NEW GAME</button>
+      <button class="ctrl-btn secondary" id="hint-btn">💡 提示 HINT</button>
+    </div>
+
+    <!-- Result overlay -->
+    <div class="result-overlay hidden" id="result-overlay">
+      <div class="result-card">
+        <div class="result-icon" id="result-icon">🎉</div>
+        <h2 class="result-title" id="result-title">任務成功！</h2>
+        <p class="result-msg" id="result-msg"></p>
+        <div class="result-stars" id="result-stars"></div>
+        <button class="launch-btn result-play-btn" id="play-again-btn">🚀 再玩一次 PLAY AGAIN</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer signature -->
+  <footer class="galaxy-footer">
+    <span class="footer-glyph">✦</span>
+    Crafted with 💜 by &nbsp;<strong>林元薇</strong>&nbsp; · 電資一甲 412043 ·
+    <span class="footer-glyph">✦</span>
+  </footer>
+
+  <script src="game.js"></script>
+</body>
+</html>
